@@ -2,6 +2,8 @@
 
 import { useEditor, EditorContent} from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
+import TaskItem from "@tiptap/extension-task-item"
+import TaskList from "@tiptap/extension-task-list"
 
 export const Editor = () => {
 
@@ -12,7 +14,11 @@ export const Editor = () => {
                 class: "focus:outline-none print:border-0 bg-white border-[#C7C7C7] border flex-col min-h-[1054px] w-[816px] pt-10 pr-14 pb-10 cursor-text"
             },
         },
-        extensions: [StarterKit],
+        extensions: [
+            StarterKit,
+            TaskItem,
+            TaskList,
+        ],
         content: '<p>Hello World!</p>'
     })
 
