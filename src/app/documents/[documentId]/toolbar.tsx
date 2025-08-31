@@ -8,7 +8,10 @@ import {
     SpellCheckIcon, 
     BoldIcon, 
     ItalicIcon, 
-    UnderlineIcon 
+    UnderlineIcon, 
+    MessageSquarePlusIcon,
+    ListTodoIcon,
+    RemoveFormattingIcon
 } from "lucide-react";
 
 import {cn} from "@/lib/utils";
@@ -98,8 +101,27 @@ export const Toolbar = () => {
                 label: "Underline",
                 icon: UnderlineIcon,
                 isActive: editor?.isActive("underline"),
-                onClick: () => editor?.chain().focus().toggleItalic().run(),
-            }
+                onClick: () => editor?.chain().focus().toggleUnderline().run(),
+            },
+        ],
+        [
+            {
+                label: "Comment",
+                icon: MessageSquarePlusIcon,
+                onClick: () => console.log("Comment"),
+                isActive: false, 
+            },
+            {
+                label: "List Todo",
+                icon: ListTodoIcon,
+                onClick: () => editor?.chain().focus().toggleTaskList().run(),
+                isActive: editor?.isActive("taskList"),
+            },
+            {
+                label: "Remove Formatting",
+                icon: RemoveFormattingIcon,
+                onClick: () => editor?.chain().focus().unsetAllMarks().run(),
+            },
         ]
     ];
 
@@ -116,6 +138,17 @@ export const Toolbar = () => {
             {/* TODO: Font size */}
             <Separator orientation="vertical" className="h-6 bg-neutral-300" />
             {sections[1].map((item) => (
+                <ToolbarButton key={item.label} {...item} />
+            ))}
+            {/* TODO: Text color */}
+            {/* TODO: Highlight Color */}
+            <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+            {/* TODO: Link */}
+            {/* TODO: Image */}
+            {/* TODO: Align */}
+            {/* TODO: Line Height */}
+            {/* TODO: List */}
+            {sections[2].map((item) => (
                 <ToolbarButton key={item.label} {...item} />
             ))}
         </div>
