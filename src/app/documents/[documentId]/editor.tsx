@@ -2,6 +2,7 @@
 
 import { useEditor, EditorContent} from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
+import TextAlign from "@tiptap/extension-text-align"
 import TaskItem from "@tiptap/extension-task-item"
 import Table from "@tiptap/extension-table"
 import { Color } from "@tiptap/extension-color"
@@ -16,6 +17,7 @@ import ImageResize from "tiptap-extension-resize-image"
 import Underline from "@tiptap/extension-underline"
 import FontFamily from "@tiptap/extension-font-family"
 import TextStyle from "@tiptap/extension-text-style"
+
 
 import { useEditorStore } from "@/store/use-editor-store"
  
@@ -57,6 +59,9 @@ export const Editor = () => {
         },
         extensions: [
             StarterKit,
+            TextAlign.configure({
+              types: ["heading", "paragraph"]
+            }),
             Link.configure({
               openOnClick: true,
               autolink: true,
