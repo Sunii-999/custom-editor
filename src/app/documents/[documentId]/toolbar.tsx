@@ -12,7 +12,8 @@ import {
     MessageSquarePlusIcon,
     ListTodoIcon,
     RemoveFormattingIcon,
-    ChevronDownIcon
+    ChevronDownIcon,
+    HighlighterIcon
 } from "lucide-react";
 
 import {cn} from "@/lib/utils";
@@ -20,7 +21,7 @@ import {cn} from "@/lib/utils";
 import { useEditorStore } from "@/store/use-editor-store";
 import { Separator } from "@/components/ui/separator";
 
-import { type ColorResult, CirclePicker } from "react-color"
+import { type ColorResult, SketchPicker } from "react-color"
 import { type Level } from "@tiptap/extension-heading";
 
 import {
@@ -29,6 +30,34 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+const HighlightColorButton = () => {
+    const { editor } = useEditorStore();
+
+    const value = editor?.getAttributes('highlight').color || "#ffffff"
+
+    const onChange = (color:ColorResult) => {
+        editor?.chain().focus().setHighlight({color : color.hex}).run();
+    };
+
+    return(
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <button
+                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+                >
+                    <HighlighterIcon className="size-4"/>
+                </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="p-0">
+                <SketchPicker
+                    color = {value}
+                    onChange={onChange}
+                />
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}
 
 const TextColorButton = () => {
     const { editor } = useEditorStore();
@@ -53,8 +82,8 @@ const TextColorButton = () => {
                     </div>
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="p-2.5">
-                <CirclePicker
+            <DropdownMenuContent className="p-0">
+                <SketchPicker
                     color={value}
                     onChange={onChange}
                 />
@@ -294,7 +323,7 @@ export const Toolbar = () => {
                 <ToolbarButton key={item.label} {...item} />
             ))}
             <TextColorButton/>
-            {/* TODO: Highlight Color */}
+            <HighlightColorButton/>
             <Separator orientation="vertical" className="h-6 bg-neutral-300" />
             {/* TODO: Link */}
             {/* TODO: Image */}
