@@ -7,6 +7,7 @@ import Table from "@tiptap/extension-table"
 import { Color } from "@tiptap/extension-color"
 import Highlight from "@tiptap/extension-highlight"
 import TaskList from "@tiptap/extension-task-list"
+import Link from "@tiptap/extension-link"
 import TableCell from "@tiptap/extension-table-cell"
 import TableHeader from "@tiptap/extension-table-header"
 import TableRow from "@tiptap/extension-table-row"
@@ -56,6 +57,11 @@ export const Editor = () => {
         },
         extensions: [
             StarterKit,
+            Link.configure({
+              openOnClick: true,
+              autolink: true,
+               defaultProtocol: "https"
+            }),
             Color,
             Highlight.configure({
               multicolor: true,

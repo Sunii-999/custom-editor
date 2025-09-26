@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { 
     LucideIcon, 
     Redo2Icon, 
@@ -13,7 +14,8 @@ import {
     ListTodoIcon,
     RemoveFormattingIcon,
     ChevronDownIcon,
-    HighlighterIcon
+    HighlighterIcon,
+    Link2Icon
 } from "lucide-react";
 
 import {cn} from "@/lib/utils";
@@ -24,12 +26,54 @@ import { Separator } from "@/components/ui/separator";
 import { type ColorResult, SketchPicker } from "react-color"
 import { type Level } from "@tiptap/extension-heading";
 
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+const LinkButton = () => {
+    const { editor } = useEditorStore();
+    const [ value, setValue] = useState(editor?.getAttributes("link").href || "");
+
+    const onChange =  (href: string) => {
+        editor?.chain().focus(). extendMarkRange("link").setLink({ href }).run();
+        setValue("");
+    }
+
+    return(
+        <DropdownMenu onOpenChange={(open) => {
+            if (open) {
+                setValue(editor?.getAttributes("link").href || "")
+            }
+        }}>
+            <DropdownMenuTrigger asChild>
+                <button
+                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+                >
+                    <Link2Icon className="size-4"/>
+                </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="p-2.5 flex items-center gap-x-2">
+                <Input 
+                    placeholder="https://www.example.com"
+                    value = {value}
+                    onChange={(e) => setValue(e.target.value)}
+                />
+                <Button
+                    onClick={() => onChange(value)}
+                >
+                    Apply 
+                </Button>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+
+}
 
 const HighlightColorButton = () => {
     const { editor } = useEditorStore();
@@ -325,7 +369,7 @@ export const Toolbar = () => {
             <TextColorButton/>
             <HighlightColorButton/>
             <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-            {/* TODO: Link */}
+            <LinkButton/>
             {/* TODO: Image */}
             {/* TODO: Align */}
             {/* TODO: Line Height */}
