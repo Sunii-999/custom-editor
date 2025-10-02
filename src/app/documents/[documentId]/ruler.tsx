@@ -22,20 +22,24 @@ export const Ruler = () => {
     };
 
     const handleMouseMove = (e: React.MouseEvent) => {
+
+        const PAGE_WIDTH = 816;
+        const MIN_SPACE = 25;
+
         if ((isDraggingLeft || isDraggingRight) && rulerRef.current) {
             const container = rulerRef.current.querySelector("#ruler-container");
             if (container) {
                 const containerRect = container.getBoundingClientRect();
                 const relativeX = e.clientX - containerRect.left;
-                const rawPosition = Math.max(0, Math.min(816, relativeX));
+                const rawPosition = Math.max(0, Math.min(PAGE_WIDTH, relativeX));
 
                 if (isDraggingLeft) {
-                    const maxLeftPosition = 816 - rightMargin - 100;
+                    const maxLeftPosition = PAGE_WIDTH - rightMargin - MIN_SPACE;
                     const newLeftPosition = Math.min(rawPosition, maxLeftPosition);
                     setLeftMargin(newLeftPosition)
                 } else if (isDraggingRight){
-                    const maxRightPosition = 816 - rightMargin + 100;
-                    const newRightPosition = Math.max(816 - rawPosition, 0);
+                    const maxRightPosition = PAGE_WIDTH - rightMargin + MIN_SPACE;
+                    const newRightPosition = Math.max(PAGE_WIDTH - rawPosition, 0);
                     const constrainedRightPosition = Math.min(newRightPosition, maxRightPosition);
                     setRightMargin(constrainedRightPosition)
                 }
@@ -137,7 +141,7 @@ interface MarkerProps {
 const Marker = ({
     position,
     isLeft,
-    isDragging,
+    isDragging, // Make colaborative
     onMouseDown,
     onDoubleClick,
 }: MarkerProps) =>{
@@ -150,6 +154,16 @@ const Marker = ({
     >
         <FaCaretDown 
             className="absolute left-1/2 top-0 h-full fill-blue-500 transform -translate-x-1/2"
+        />
+        <div
+            className="absolute left-1/2 top-4 transform -translate-x-1/2 transition-opacity duration-150"
+            style={{
+                height: "100vh",
+                width: "1px",
+                transform: "scaleX(0.5)",
+                backgroundColor: "#3b72f6",
+                display: isDragging ? "block" : "none",
+            }}
         />
     </div>
     );
