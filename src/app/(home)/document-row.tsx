@@ -9,6 +9,7 @@ import { Building2Icon, CircleUserIcon } from "lucide-react";
 
 import {format} from "date-fns"
 import { DocumentMenu } from "./document-menu";
+import { useRouter } from "next/navigation";
 
 interface DocumentRowProps {
     document: Doc<"documents">;
@@ -16,12 +17,15 @@ interface DocumentRowProps {
 
 export const DocumentRow =({document}: DocumentRowProps) => {
 
+    const router = useRouter();
+
     const onNewTabClick = (id: string) => {
         window.open(`/documents/${id}`, "_blank");
     }
 
     return (
         <TableRow
+            onClick={() => router.push(`/documents/${document._id}`)}
             className="cursor-pointer"
         >
             <TableCell>
@@ -43,7 +47,7 @@ export const DocumentRow =({document}: DocumentRowProps) => {
                 <DocumentMenu
                     documentId={document._id}
                     title={document.title}
-                    onNewTab={onNewTabClick}
+                    onNewTab={() => window.open(`/documents/${document._id}`, "_blank")                }
                 />
             </TableCell>
         </TableRow>
