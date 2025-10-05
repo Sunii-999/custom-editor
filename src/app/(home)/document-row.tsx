@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button"; // Assuming you have a standard
 
 interface DocumentRowProps {
     document: Doc<"documents">;
+    isOwner: boolean;
 }
 
 export const DocumentRow =({document}: DocumentRowProps) => {
