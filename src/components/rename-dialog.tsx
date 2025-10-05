@@ -10,6 +10,9 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog"
 
+import { toast } from "sonner";
+
+
 import { Id } from "../../convex/_generated/dataModel"
 import React, { useState } from "react";
 import { useMutation } from "convex/react";
@@ -31,18 +34,21 @@ export const RenameDialog = ({documentId, initialTitle, children}: RenameDialogP
     const [title, setTitle] = useState(initialTitle);
     const [open, setOpen]= useState(false);
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsUpdating(true);
-
-        handleUpdate({id: documentId, title: title.trim() || "Untitled"})
-            .then(() => 
-                setOpen(false)
-            )
-            .finally(()=> {
-                setIsUpdating(false);
-            });
-    }
+      
+        try {
+          await handleUpdate({ id: documentId, title: title.trim() || "Untitled" });
+          toast.success("Document renamed successfully");
+        } catch (err) {
+          toast.error("Something went wrong");
+        } finally {
+          setIsUpdating(false);
+          setOpen(false);
+        }
+      }
+      
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>

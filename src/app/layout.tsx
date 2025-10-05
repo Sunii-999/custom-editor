@@ -5,6 +5,8 @@ import {NuqsAdapter} from "nuqs/adapters/next/app"
 import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
 
+import { Toaster } from "@/components/ui/sonner";
+
 
 import "./globals.css";
 import { ConvexClientProvider } from "@/components/convex-client-provider";
@@ -36,7 +38,7 @@ export default function RootLayout({
       >
         <NuqsAdapter>
           <ConvexClientProvider>
-
+            <Toaster />
             {children}
           </ConvexClientProvider>
         </NuqsAdapter>
