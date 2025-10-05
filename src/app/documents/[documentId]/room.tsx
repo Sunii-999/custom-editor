@@ -14,7 +14,7 @@ export function Room({ children }: { children: ReactNode }) {
   return (
     <LiveblocksProvider 
       throttle={16}
-      authEndpoint="api/liveblocks-auth"
+      authEndpoint="/api/liveblocks-auth"
   >
       <RoomProvider id={params.documentId as string}>
         <ClientSideSuspense fallback={<div>Loading…</div>}>

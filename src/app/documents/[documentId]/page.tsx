@@ -10,7 +10,6 @@ interface DocumentIdPageProps {
 
 const DocumentPage = async ({params}: DocumentIdPageProps) => {
     const {documentId} = await params
-
     console.log(documentId)
 
 

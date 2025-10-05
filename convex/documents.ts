@@ -82,8 +82,8 @@ export const removeById = mutation ({
 
     const isOwner = document.ownerId === user.subject;
     const isOrganizationAdmin =
-      user.organization_id === document.organizationId &&
-      user.organization_role === "org:admin";
+      !!(document.organizationId &&user.organization_id === document.organizationId &&
+      user.organization_role === "org:admin");
 
     console.log(`removing function: ${isOwner} and ${isOrganizationAdmin}`);
 
@@ -111,8 +111,8 @@ export const updateById = mutation ({
 
     const isOwner = document.ownerId === user.subject;
     const isOrganizationAdmin =
-      user.organization_id === document.organizationId &&
-      user.organization_role === "org:admin";
+      !!(document.organizationId && document.organizationId === document.organizationId &&
+      user.organization_role === "org:admin");
 
     console.log(`updating function: ${isOwner} and ${isOrganizationAdmin}`);
 
@@ -129,5 +129,6 @@ export const getById = query ({
   args: {id:v.id("documents")},
   handler: async (ctx, {id}) => {
     return await ctx.db.get(id)
+   
   }
 })
