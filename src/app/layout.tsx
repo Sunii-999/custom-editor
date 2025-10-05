@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import {NuqsAdapter} from "nuqs/adapters/next/app"
 
+import { ClerkProvider } from '@clerk/nextjs'
+import { dark } from '@clerk/themes'
+
+
 import "./globals.css";
 import { ConvexClientProvider } from "@/components/convex-client-provider";
 
@@ -21,16 +25,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+      }}
+    >
+      <html lang="en">
       <body
         className={inter.className}
       >
         <NuqsAdapter>
           <ConvexClientProvider>
+
             {children}
           </ConvexClientProvider>
         </NuqsAdapter>
       </body>
     </html>
+    </ClerkProvider>
   );
 }

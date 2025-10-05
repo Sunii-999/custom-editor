@@ -24,7 +24,7 @@ export const DocumentsTable = ({
     status,
 }: DocumentsTableProps) => {
     return(
-        <div className="max-w-screen-xl mx-auto px-16 py-6 flex flex-col gap-5">
+        <div className="max-w-screen-xl mx-auto px-16 py-6 flex flex-col gap-5 bg-grey-800">
             {documents === undefined? (
                 <div>
 

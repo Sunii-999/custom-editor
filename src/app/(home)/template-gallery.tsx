@@ -17,7 +17,8 @@ import { useState } from "react";
 export const TemplateGallery = () => {
 
     const router = useRouter();
-    const create = useMutation(api.documents.create);
+    // Assuming `api.documents.create` and the data structure remain the same.
+    const create = useMutation(api.documents.create); 
     const [isCreating, setIsCreating] = useState(false);
 
     const onTemplateClick = (title: string, initialContent:string) => {
@@ -32,12 +33,13 @@ export const TemplateGallery = () => {
     };
 
     return(
-        <div className="bg-[#f1f3f4]">
-            <div className="max-w-screen-xl mx-auto px-16 py-6 flex flex-col gap-y-4">
-                <h3 className="font-medium">
+        // 1. Dark background color for the container
+        <div className="bg-[#202124]"> 
+            <div className="max-w-screen-xl mx-auto px-16 py-8 flex flex-col gap-y-6 text-gray-200">
+                <h3 className="font-semibold text-xl">
                     Start a new document
                 </h3>
-                <Carousel>
+                <Carousel className="relative">
                     <CarouselContent className="-ml-4">
                         {templates.map((template) => (
                             <CarouselItem 
@@ -47,7 +49,8 @@ export const TemplateGallery = () => {
                                 <div
                                     className={cn(
                                         "aspect-[3/4] flex flex-col gap-y-2.5",
-                                        isCreating && "pointer-events-none opacity-50"
+                                        // Dark theme disable state
+                                        isCreating && "pointer-events-none opacity-40 transition-opacity duration-300"
                                     )}
                                 >
                                     <button
@@ -60,17 +63,27 @@ export const TemplateGallery = () => {
                                             backgroundPosition: "center",
                                             backgroundRepeat: "no-repeat"
                                         }}
-                                        className="size-full hover:border-blue-500 rounded-sm border hover:bg-blue-50 transition flex flex-col items-center justify-center gap-y-4 bg-white"   
-                                    /   >
-                                    <p className="text-sm font-medium truncate">
+                                        // 2. Dark theme card styles: shadow, rounded corners, lighter dark background, and a blue ring hover effect.
+                                        className="size-full shadow-lg rounded-lg transition 
+                                                   flex flex-col items-center justify-center gap-y-4 
+                                                   bg-[#2f3032] 
+                                                   hover:ring-2 hover:ring-blue-500 hover:scale-[1.02] active:scale-[0.98] 
+                                                   transform duration-150 ease-in-out"   
+                                    />
+                                    <p className="text-sm font-medium truncate text-gray-200">
                                         {template.label}
                                     </p>
                                 </div>
                              </CarouselItem>
                         ))}
                     </CarouselContent>
-                    <CarouselPrevious/>
-                    <CarouselNext/>
+                    
+                    <CarouselPrevious className="absolute left-[-2rem] top-1/2 -translate-y-1/2 
+                                                   h-10 w-10 rounded-full bg-gray-800/80 text-white border-none 
+                                                   shadow-xl hover:bg-gray-700/90 disabled:opacity-30 disabled:pointer-events-none"/>
+                    <CarouselNext className="absolute right-[-2rem] top-1/2 -translate-y-1/2 
+                                                  h-10 w-10 rounded-full bg-gray-800/80 text-white border-none 
+                                                  shadow-xl hover:bg-gray-700/90 disabled:opacity-30 disabled:pointer-events-none"/>
                 </Carousel>
             </div>
         </div>

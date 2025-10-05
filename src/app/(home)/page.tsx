@@ -22,8 +22,8 @@ const Home = () => {
 
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="fixed top-0 left-0 right-0 z-10 h-16 bg-white p-4">
+    <div className="min-h-screen flex flex-col bg-[#202124]">
+      <div className="fixed top-0 left-0 right-0 z-10 h-20 bg-[#202124] p-4 rounded-b-lg shadow-xl">
         <Navbar />
       </div>
       <div className="mt-16">
