@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
+import { UserButton, OrganizationSwitcher } from "@clerk/nextjs";
 
 import {
     Menubar,
@@ -27,7 +28,6 @@ import {
     FileTextIcon, 
     GlobeIcon, 
     ItalicIcon, 
-    Menu, 
     PrinterIcon, 
     Redo2Icon, 
     RemoveFormattingIcon, 
@@ -42,11 +42,11 @@ import { BsFilePdf } from "react-icons/bs"
 import { useEditorStore } from "@/store/use-editor-store"
 
 export const Navbar = () => {
-    const{ editor } = useEditorStore();
+    const { editor } = useEditorStore();
 
-    const insertTable = ({ rows, cols}:  {rows: number, cols: number}) => {
+    const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
         editor?.chain().focus().insertTable({ rows, cols, withHeaderRow: false }).run();
-    }
+    };
 
     const onDownload = (blob: Blob, filename: string) => {
         const url = URL.createObjectURL(blob);
@@ -54,60 +54,51 @@ export const Navbar = () => {
         a.href = url;
         a.download = filename;
         a.click();
-    }
+    };
 
     const onSaveHTML = () => {
         if (!editor) return;
-
         const content = editor.getHTML();
-        const blob = new Blob([content], { 
-            type: "text/html" 
-        });
+        const blob = new Blob([content], { type: "text/html" });
         onDownload(blob, "document.html");
-    }
+    };
 
     const onSaveJSON = () => {
         if (!editor) return;
-
         const content = editor.getJSON();
-        const blob = new Blob([JSON.stringify(content)], { 
-            type: "application/json" 
-        });
+        const blob = new Blob([JSON.stringify(content)], { type: "application/json" });
         onDownload(blob, "document.json");
-
-    }
+    };
 
     const onSaveText = () => {
         if (!editor) return;
-
         const content = editor.getText();
-        const blob = new Blob([content], { 
-            type: "text/plain" 
-        });
+        const blob = new Blob([content], { type: "text/plain" });
         onDownload(blob, "document.txt");
-    }
+    };
 
     return (
-        <nav className="flex items-center justify-between">
-            <div className="flex gap-2 items-center"> 
+        <nav className="flex items-center justify-between px-4 py-2 bg-[#202124] border-b border-[#3c4043]">
+            <div className="flex gap-3 items-center"> 
                 <Link href="/">
-                    <Image src="/logo.svg" alt="logo" width={36} height={36} />
+                    <Image src="/logo.svg" alt="logo" width={36} height={36} className="invert" />
                 </Link>
                 <div className="flex flex-col">
                     <DocumentInput />
                     <div className="flex">
-                        <Menubar className="border-none bg-transparent shadow-none h-auto p-0">
+                        <Menubar className="border-none bg-transparent shadow-none h-auto p-0 text-gray-300">
+                            {/* File Menu */}
                             <MenubarMenu>
-                                <MenubarTrigger className="text-sm font-normal py-0.5 px-[7px] rounded-sm hover:bg-muted h-auto">
+                                <MenubarTrigger className="text-sm font-medium px-2 py-1 rounded hover:bg-[#303134] transition">
                                     File
                                 </MenubarTrigger>
-                                <MenubarContent className="print:hidden">
+                                <MenubarContent className="bg-[#303134] text-gray-200 border border-[#3c4043] shadow-lg rounded-md min-w-[180px]">
                                     <MenubarSub>
                                         <MenubarSubTrigger>
                                             <FileIcon className="size-4 mr-2" />
                                             Save
                                         </MenubarSubTrigger>
-                                        <MenubarSubContent>
+                                        <MenubarSubContent className="bg-[#303134] border border-[#3c4043] rounded-md">
                                             <MenubarItem onClick={onSaveJSON}>
                                                 <FileJsonIcon className="size-4 mr-2"/>
                                                 JSON
@@ -116,7 +107,7 @@ export const Navbar = () => {
                                                 <GlobeIcon className="size-4 mr-2"/>
                                                 HTML
                                             </MenubarItem>
-                                            <MenubarItem onClick = {() => window.print()}>
+                                            <MenubarItem onClick={() => window.print()}>
                                                 <BsFilePdf className="size-4 mr-2"/>
                                                 PDF
                                             </MenubarItem>
@@ -130,7 +121,7 @@ export const Navbar = () => {
                                         <FilePlusIcon className="size-4 mr-2"/>
                                         New Document
                                     </MenubarItem>
-                                    <MenubarSeparator />
+                                    <MenubarSeparator className="bg-[#3c4043]" />
                                     <MenubarItem>
                                         <FilePenIcon className="size-4 mr-2"/>
                                         Rename
@@ -139,65 +130,63 @@ export const Navbar = () => {
                                         <TrashIcon className="size-4 mr-2"/>
                                         Remove
                                     </MenubarItem>
-                                    <MenubarSeparator />
+                                    <MenubarSeparator className="bg-[#3c4043]" />
                                     <MenubarItem onClick={() => window.print()}>
                                         <PrinterIcon className="size-4 mr-2"/>
                                         Print <MenubarShortcut>⌘P / CTRL + P</MenubarShortcut>
                                     </MenubarItem>
                                 </MenubarContent>
                             </MenubarMenu>
+
+                            {/* Edit Menu */}
                             <MenubarMenu>
-                                <MenubarTrigger className="text-sm font-normal py-0.5 px-[7px] rounded-sm hover:bg-muted h-auto">
+                                <MenubarTrigger className="text-sm font-medium px-2 py-1 rounded hover:bg-[#303134] transition">
                                     Edit
                                 </MenubarTrigger>
-                                <MenubarContent className="print:hidden">
+                                <MenubarContent className="bg-[#303134] text-gray-200 border border-[#3c4043] shadow-lg rounded-md min-w-[160px]">
                                     <MenubarItem onClick={() => editor?.chain().focus().undo().run()}>
                                         <Undo2Icon className="size-4 mr-2"/>
                                         Undo <MenubarShortcut>⌘Z / CTRL + Z</MenubarShortcut>
                                     </MenubarItem>
-                                    <MenubarItem onClick={() => editor?.chain().focus().redo().run()}> 
+                                    <MenubarItem onClick={() => editor?.chain().focus().redo().run()}>
                                         <Redo2Icon className="size-4 mr-2"/>
                                         Redo <MenubarShortcut>⌘Y / CTRL + Y</MenubarShortcut>
                                     </MenubarItem>
                                 </MenubarContent>
                             </MenubarMenu>
+
+                            {/* Insert Menu */}
                             <MenubarMenu>
-                                <MenubarTrigger className="text-sm font-normal py-0.5 px-[7px] rounded-sm hover:bg-muted h-auto">
+                                <MenubarTrigger className="text-sm font-medium px-2 py-1 rounded hover:bg-[#303134] transition">
                                     Insert
                                 </MenubarTrigger>
-                                <MenubarContent className="print:hidden">
+                                <MenubarContent className="bg-[#303134] text-gray-200 border border-[#3c4043] shadow-lg rounded-md min-w-[140px]">
                                     <MenubarSub>
                                         <MenubarSubTrigger>
                                             Table
                                         </MenubarSubTrigger>
-                                        <MenubarSubContent>
-                                            <MenubarItem onClick={() => insertTable({rows: 1, cols: 1})}>
-                                                1 x 1
-                                            </MenubarItem>
-                                            <MenubarItem onClick={() => insertTable({rows: 2, cols: 2})}>
-                                                2 x 2
-                                            </MenubarItem>
-                                            <MenubarItem onClick={() => insertTable({rows: 3, cols: 3})}>
-                                                3 x 3
-                                            </MenubarItem>
-                                            <MenubarItem onClick={() => insertTable({rows: 4, cols: 4})}>
-                                                4 x 4
-                                            </MenubarItem>
+                                        <MenubarSubContent className="bg-[#303134] border border-[#3c4043] rounded-md">
+                                            <MenubarItem onClick={() => insertTable({rows: 1, cols: 1})}>1 x 1</MenubarItem>
+                                            <MenubarItem onClick={() => insertTable({rows: 2, cols: 2})}>2 x 2</MenubarItem>
+                                            <MenubarItem onClick={() => insertTable({rows: 3, cols: 3})}>3 x 3</MenubarItem>
+                                            <MenubarItem onClick={() => insertTable({rows: 4, cols: 4})}>4 x 4</MenubarItem>
                                         </MenubarSubContent>
                                     </MenubarSub>
                                 </MenubarContent>
                             </MenubarMenu>
+
+                            {/* Format Menu */}
                             <MenubarMenu>
-                                <MenubarTrigger className="text-sm font-normal py-0.5 px-[7px] rounded-sm hover:bg-muted h-auto">
+                                <MenubarTrigger className="text-sm font-medium px-2 py-1 rounded hover:bg-[#303134] transition">
                                     Format
                                 </MenubarTrigger>
-                                <MenubarContent className="print:hidden">
+                                <MenubarContent className="bg-[#303134] text-gray-200 border border-[#3c4043] shadow-lg rounded-md min-w-[180px]">
                                     <MenubarSub>
                                         <MenubarSubTrigger>
                                             <TextIcon className="size-4 mr-2"/>
                                             Text
                                         </MenubarSubTrigger>
-                                        <MenubarSubContent>
+                                        <MenubarSubContent className="bg-[#303134] border border-[#3c4043] rounded-md">
                                             <MenubarItem onClick={() => editor?.chain().focus().toggleBold().run()}>
                                                 <BoldIcon className="size-4 mr-2"/>
                                                 Bold <MenubarShortcut>⌘B / CTRL + B</MenubarShortcut>
@@ -212,7 +201,7 @@ export const Navbar = () => {
                                             </MenubarItem>
                                             <MenubarItem onClick={() => editor?.chain().focus().toggleStrike().run()}>
                                                 <StrikethroughIcon className="size-4 mr-2"/>
-                                                Strikethrough&nbsp;&nbsp; <MenubarShortcut>⌘S / CTRL + S</MenubarShortcut>
+                                                Strikethrough <MenubarShortcut>⌘S / CTRL + S</MenubarShortcut>
                                             </MenubarItem>
                                         </MenubarSubContent>
                                     </MenubarSub>
@@ -226,7 +215,15 @@ export const Navbar = () => {
                     </div>
                 </div>
             </div>
-            
+            <div className="flex gap-3 items-center">
+                <OrganizationSwitcher
+                    afterCreateOrganizationUrl="/"
+                    afterLeaveOrganizationUrl="/"
+                    afterSelectOrganizationUrl="/"
+                    afterSelectPersonalUrl="/"
+                />
+                <UserButton />
+            </div>
         </nav>
-    )
-}
+    );
+};
