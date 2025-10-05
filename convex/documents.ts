@@ -124,3 +124,10 @@ export const updateById = mutation ({
   }
 })
 
+
+export const getById = query ({
+  args: {id:v.id("documents")},
+  handler: async (ctx, {id}) => {
+    return await ctx.db.get(id)
+  }
+})
