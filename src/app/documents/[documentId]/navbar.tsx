@@ -19,6 +19,8 @@ import {
 
 import { DocumentInput } from "./document-input"
 
+import { Avatars } from "./avatar";
+
 import { 
     BoldIcon,
     FileIcon, 
@@ -27,6 +29,7 @@ import {
     FilePlusIcon, 
     FileTextIcon, 
     GlobeIcon, 
+    Inbox, 
     ItalicIcon, 
     PrinterIcon, 
     Redo2Icon, 
@@ -216,6 +219,8 @@ export const Navbar = () => {
                 </div>
             </div>
             <div className="flex gap-3 items-center">
+                <Avatars />
+                <Inbox />
                 <OrganizationSwitcher
                     afterCreateOrganizationUrl="/"
                     afterLeaveOrganizationUrl="/"

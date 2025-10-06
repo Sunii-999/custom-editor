@@ -5,7 +5,6 @@ import {
   LiveblocksProvider,
   RoomProvider,
   ClientSideSuspense,
-  useOthersListener,
 } from "@liveblocks/react/suspense";
 import { useParams } from "next/navigation";
 import { FullscreenLoader } from "@/components/fullscreen-loader";
@@ -16,15 +15,22 @@ type User = {id: string; name: string; avatar: string; role: string}
 
 export function Room({ children }: { children: ReactNode }) {
     const params = useParams();
+    const documentId = params.documentId as string; // Cache the document ID
 
     const [users, setUsers] = useState<User []>([]);
+
+    // Log when the component mounts and the document ID
+    useEffect(() => {
+    }, [documentId]); // Added dependency on documentId for logging
 
     const fetchUsers = useMemo(
       () => async () => {
         try {
+          console.log("DEBUG CLIENT: Attempting to fetch users...");
           const list = await getUsers();
           setUsers(list);
-        } catch {
+        } catch (e) {
+          console.error("DEBUG ERROR: Failed to fetch users:", e);
           toast.error("Failed to fetch users");
         }
       },
@@ -35,17 +41,34 @@ export function Room({ children }: { children: ReactNode }) {
       fetchUsers();
     }, [fetchUsers]);
 
+    if (users.length === 0) {
+      return <FullscreenLoader label="Loading room..." />;
+    }
+
 
   return (
     <LiveblocksProvider 
       throttle={16}
-      authEndpoint="/api/liveblocks-auth"
+      authEndpoint={ async () => {
+        const endpoint = "/api/liveblocks-auth"
+        const room = params.documentId as string;
+        
+        const response = await fetch(endpoint, {
+          method: "POST",
+          body: JSON.stringify({room})
+        })
+
+        return await response.json()
+      }}
       resolveUsers = {({userIds}) => {
-        return userIds.map(
+        
+        const resolvedUsers = userIds.map(
           (userId) => users.find((user) => user.id === userId) ?? undefined 
         )
+        return resolvedUsers;
       }}
       resolveMentionSuggestions = {({text}) => {
+        
         let filteredUsers = users;
 
         if (text){
@@ -57,7 +80,7 @@ export function Room({ children }: { children: ReactNode }) {
         return filteredUsers.map((user) => user.id)
       }}
       resolveRoomsInfo = {() => []}
-  >
+    >
       <RoomProvider id={params.documentId as string}>
         <ClientSideSuspense fallback={<FullscreenLoader label="Room loading..."/>}>
           {children}

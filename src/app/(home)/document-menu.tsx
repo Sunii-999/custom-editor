@@ -40,20 +40,13 @@ export const DocumentMenu = ({documentId, title, onNewTab}: DocumentMenuProps) =
                 </Button>
             </DropdownMenuTrigger>
             
-            {/* Modern Dark Theme Dropdown Content: 
-                1. Set a dark background and text color.
-                2. Use subtle shadows.
-            */}
             <DropdownMenuContent 
                 className="w-48 bg-[#2f3032] border border-gray-700 text-gray-200 shadow-xl rounded-lg"
             >
                 
-                {/* 1. Rename Option */}
                 <RenameDialog documentId={documentId} initialTitle={title}>
                     <DropdownMenuItem
-                        // Prevent the menu from closing on click when opening the nested dialog
                         onSelect={(e) => e.preventDefault()} 
-                        // Stop propagation to prevent the table row from triggering the navigation
                         onClick={(e) => e.stopPropagation()} 
                         className="cursor-pointer hover:bg-gray-700/70 data-[highlighted]:bg-gray-700/70"
                     >
