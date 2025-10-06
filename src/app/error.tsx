@@ -23,7 +23,7 @@ const ErrorPage = ({
             </div>
             <div className="space-y-2">
                 <h2 className="text-xl font-semibold text-gray-400">
-                    Something went rong
+                    Something went wrong or you have been removed
                 </h2>
             </div>
         </div>

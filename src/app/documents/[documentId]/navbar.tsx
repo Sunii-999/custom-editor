@@ -4,6 +4,9 @@ import Image from "next/image"
 import Link from "next/link"
 import { UserButton, OrganizationSwitcher } from "@clerk/nextjs";
 
+import { RenameDialog } from "@/components/rename-dialog";
+import { RemoveDialog } from "@/components/remove-dialog";
+
 import {
     Menubar,
     MenubarContent,
@@ -44,13 +47,32 @@ import {
 import { BsFilePdf } from "react-icons/bs"
 import { useEditorStore } from "@/store/use-editor-store"
 import { Doc } from "../../../../convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface NavBarProps {
     data: Doc<"documents">,
 }
 
 export const Navbar = ({data}: NavBarProps) => {
+    const router = useRouter()
     const { editor } = useEditorStore();
+
+    const mutation = useMutation(api.documents.create);
+
+    const onNewDocument = () => {
+        mutation({
+            title: "Untitled document",
+            initialContent: ""
+        })
+        .then((id) =>{
+            toast.success("Document created")
+            router.push(`/documents/${id}`)
+        })
+        .catch(() => toast.error("Document creation failed"))
+    }
 
     const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
         editor?.chain().focus().insertTable({ rows, cols, withHeaderRow: false }).run();
@@ -125,19 +147,29 @@ export const Navbar = ({data}: NavBarProps) => {
                                             </MenubarItem>
                                         </MenubarSubContent>
                                     </MenubarSub>
-                                    <MenubarItem>
+                                    <MenubarItem onClick={onNewDocument}>
                                         <FilePlusIcon className="size-4 mr-2"/>
                                         New Document
                                     </MenubarItem>
                                     <MenubarSeparator className="bg-[#3c4043]" />
-                                    <MenubarItem>
-                                        <FilePenIcon className="size-4 mr-2"/>
-                                        Rename
-                                    </MenubarItem>
-                                    <MenubarItem>
-                                        <TrashIcon className="size-4 mr-2"/>
-                                        Remove
-                                    </MenubarItem>
+                                    <RenameDialog documentId={data._id} initialTitle={data.title}>
+  <MenubarItem
+    onSelect={(e) => e.preventDefault()} // keep menu open so DialogTrigger fires
+  >
+    <FilePenIcon className="size-4 mr-2" />
+    Rename
+  </MenubarItem>
+</RenameDialog>
+
+<RemoveDialog documentId={data._id}>
+  <MenubarItem
+    onSelect={(e) => e.preventDefault()} // same here
+  >
+    <TrashIcon className="size-4 mr-2" />
+    Remove
+  </MenubarItem>
+</RemoveDialog>
+
                                     <MenubarSeparator className="bg-[#3c4043]" />
                                     <MenubarItem onClick={() => window.print()}>
                                         <PrinterIcon className="size-4 mr-2"/>

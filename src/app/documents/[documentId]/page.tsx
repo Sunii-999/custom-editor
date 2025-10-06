@@ -33,10 +33,6 @@ const DocumentIdPage = async({params}: DocumentIdPageProps) => {
         }
     )
 
-    if (!preloadedDocument){
-        throw new Error("Document not found")
-    }
-
     return <Document preloadedDocument={preloadedDocument} />;
 }
  

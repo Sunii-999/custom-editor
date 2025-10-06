@@ -28,10 +28,17 @@ import { Ruler } from "./ruler"
 
 import { useEditorStore } from "@/store/use-editor-store"
 import { Threads } from "./threads"
+
+interface EditorProps {
+  initialContent?: string | undefined
+}
  
 
-export const Editor = () => {
-  const liveblocks = useLiveblocksExtension();
+export const Editor = ({initialContent}: EditorProps) => {
+  const liveblocks = useLiveblocksExtension({
+    initialContent,
+    offlineSupport_experimental: true,
+  });
   const { setEditor } = useEditorStore()
 
     const editor = useEditor ({
