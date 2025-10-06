@@ -12,40 +12,66 @@ const liveblocks = new Liveblocks({
 export async function POST(req: Request) {
     const { sessionClaims} = await auth();    
 
+    console.log("DEBUG: Checking Clerk session claims...");
     if(!sessionClaims) {
+        console.error("DEBUG FAILURE: Returned 401. Reason: No session claims found.");
         return new Response("Unauthorized", { status: 401 });
     }
 
     const user = await currentUser();
 
     if(!user) {
+        console.error("DEBUG FAILURE: Returned 401. Reason: No current user found.");
         return new Response("Unauthorized", { status: 401 });
     }
 
-    const { room } = await req.json();
-    const document = await convex.query(api.documents.getById, {id: room})
+    try {
+        const { room } = await req.json();
 
-    if(!document){
-        return new Response("Room not found", { status: 404 });
-    }
+        // --- LOGIC BLOCK 3: ROOM ID AND CONVEX DOCUMENT ---
+        console.log(`DEBUG: Requested room ID: ${room}`);
 
-    const isOwner = document.ownerId === user.id;
-
-    const isOrganizationMember = !!(document.organizationId && document.organizationId === sessionClaims?.org_id)
-
-    if (!isOwner && !isOrganizationMember) {
-        return new Response("Unauthorized", { status: 401 });
-    }
-
-    const session = liveblocks.prepareSession(user.id, {
-        userInfo: {
-            name: user.username ?? "Anonymous",
-            avatar: user.imageUrl
+        if (!room) {
+             console.error("DEBUG FAILURE: Returned 400. Reason: Room ID is missing from request body.");
+             return new Response("Bad Request: Missing room ID", { status: 400 });
         }
-    })
-    session.allow(room, session.FULL_ACCESS)
 
-    const { body, status} = await session.authorize();
+        const document = await convex.query(api.documents.getById, {id: room})
 
-    return new Response(body, {status})
+        if(!document){
+            console.error(`DEBUG FAILURE: Returned 404. Reason: Document not found for room ID: ${room}`);
+            return new Response("Room not found", { status: 404 });
+        }
+        // --- LOGIC BLOCK 4: AUTHORIZATION CHECK ---
+        const isOwner = document.ownerId === user.id;
+
+const userOrgId = sessionClaims?.org_id || sessionClaims?.o?.id;
+
+const isOrganizationMember = !!(
+    document.organizationId && document.organizationId === userOrgId
+);        
+
+        if (!isOwner && !isOrganizationMember) {
+            console.error("DEBUG FAILURE: Returned 401. Reason: User is neither the owner nor an organization member.");
+            return new Response("Unauthorized", { status: 401 });
+        }
+
+        // --- LIVEBLOCKS SESSION PREPARATION ---
+        const session = liveblocks.prepareSession(user.id, {
+            userInfo: {
+                name: user.fullName ?? "Anonymous",
+                avatar: user.imageUrl
+            }
+        })
+        session.allow(room, session.FULL_ACCESS)
+
+        const { body, status} = await session.authorize();
+
+        return new Response(body, {status})
+        
+    } catch (e) {
+        // Handle JSON parsing or other unexpected errors
+        console.error("DEBUG CRITICAL FAILURE: Unhandled error in POST handler.", e);
+        return new Response("Internal Server Error", { status: 500 });
+    }
 }
