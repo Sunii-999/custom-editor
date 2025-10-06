@@ -51,7 +51,6 @@ const isOrganizationMember = !!(
             return new Response("Unauthorized", { status: 401 });
         }
 
-        // --- LIVEBLOCKS SESSION PREPARATION ---
         const session = liveblocks.prepareSession(user.id, {
             userInfo: {
                 name: user.fullName ?? "Anonymous",

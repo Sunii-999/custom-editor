@@ -3,6 +3,25 @@ import { paginationOptsValidator } from "convex/server";
 
 import { mutation, query } from "./_generated/server";
 
+export const getByIds = query({
+  args: { ids: v.array(v.id("documents")) },
+  handler: async (ctx, { ids }) => {
+    const documents = [];
+
+    for (const id of ids){
+      const document = await ctx.db.get(id)
+
+      if(document){
+        documents.push({id: document._id, name: document.title})
+      } else {
+        documents.push({id: id, name: "Document not found"})
+      }
+    }
+
+    return documents
+  },
+})
+
 export const create = mutation ({
     args: {title: v.optional(v.string()), initialContent: v.optional(v.string())},
     handler: async (ctx, args) => {
@@ -85,8 +104,6 @@ export const removeById = mutation ({
       !!(document.organizationId &&user.organization_id === document.organizationId &&
       user.organization_role === "org:admin");
 
-    console.log(`removing function: ${isOwner} and ${isOrganizationAdmin}`);
-
     if (isOwner || isOrganizationAdmin) {
       return await ctx.db.delete(args.id);
     }
@@ -113,8 +130,6 @@ export const updateById = mutation ({
     const isOrganizationAdmin =
       !!(document.organizationId && document.organizationId === document.organizationId &&
       user.organization_role === "org:admin");
-
-    console.log(`updating function: ${isOwner} and ${isOrganizationAdmin}`);
 
     if (isOwner || isOrganizationAdmin) {
       return await ctx.db.patch(args.id, { title: args.title });

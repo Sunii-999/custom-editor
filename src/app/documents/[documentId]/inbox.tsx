@@ -1,10 +1,11 @@
 "use client"
 
+import { BellIcon } from "lucide-react"
+
 import { ClientSideSuspense } from "@liveblocks/react"
 import { useInboxNotifications } from "@liveblocks/react/suspense"
 import { InboxNotification, InboxNotificationList } from "@liveblocks/react-ui"
 
-import { BellIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -51,7 +52,10 @@ const InboxMenu = () =>{
                 {inboxNotifications.length > 0 ? (
                     <InboxNotificationList>
                         {inboxNotifications.map((inboxNotification) => (
-                            <InboxNotification key={inboxNotification.id} inboxNotification={inboxNotification} />
+                            <InboxNotification 
+                                key={inboxNotification.id}
+                                inboxNotification={inboxNotification} 
+                            />
                         ))}
                     </InboxNotificationList>
                 ) : (
