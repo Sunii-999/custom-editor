@@ -43,8 +43,13 @@ import {
 
 import { BsFilePdf } from "react-icons/bs"
 import { useEditorStore } from "@/store/use-editor-store"
+import { Doc } from "../../../../convex/_generated/dataModel";
 
-export const Navbar = () => {
+interface NavBarProps {
+    data: Doc<"documents">,
+}
+
+export const Navbar = ({data}: NavBarProps) => {
     const { editor } = useEditorStore();
 
     const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
@@ -63,21 +68,21 @@ export const Navbar = () => {
         if (!editor) return;
         const content = editor.getHTML();
         const blob = new Blob([content], { type: "text/html" });
-        onDownload(blob, "document.html");
+        onDownload(blob, `${data.title}.html`);
     };
 
     const onSaveJSON = () => {
         if (!editor) return;
         const content = editor.getJSON();
         const blob = new Blob([JSON.stringify(content)], { type: "application/json" });
-        onDownload(blob, "document.json");
+        onDownload(blob, `${data.title}.json`);
     };
 
     const onSaveText = () => {
         if (!editor) return;
         const content = editor.getText();
         const blob = new Blob([content], { type: "text/plain" });
-        onDownload(blob, "document.txt");
+        onDownload(blob, `${data.title}.txt`);
     };
 
     return (
@@ -87,8 +92,8 @@ export const Navbar = () => {
                     <Image src="/logo.svg" alt="logo" width={36} height={36} className="invert" />
                 </Link>
                 <div className="flex flex-col">
-                    <DocumentInput />
-                    <div className="flex">
+                <DocumentInput title={data.title} id={data._id}/>
+                <div className="flex">
                         <Menubar className="border-none bg-transparent shadow-none h-auto p-0 text-gray-300">
                             {/* File Menu */}
                             <MenubarMenu>
@@ -220,7 +225,7 @@ export const Navbar = () => {
             </div>
             <div className="flex gap-3 items-center">
                 <Avatars />
-                <Inbox />
+                {/* <Inbox /> */}
                 <OrganizationSwitcher
                     afterCreateOrganizationUrl="/"
                     afterLeaveOrganizationUrl="/"

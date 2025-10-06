@@ -1,7 +1,6 @@
 "use client"
 
 import { BellIcon } from "lucide-react"
-
 import { ClientSideSuspense } from "@liveblocks/react"
 import { useInboxNotifications } from "@liveblocks/react/suspense"
 import { InboxNotification, InboxNotificationList } from "@liveblocks/react-ui"
@@ -14,9 +13,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export const Inbox = () => {
-    console.log("Inbox component is mounting and will attempt ClientSideSuspense.");
     return (
-        <ClientSideSuspense fallback={null}>
+        // ClientSideSuspense is needed for Liveblocks's useInboxNotifications to work correctly
+        <ClientSideSuspense fallback={<InboxMenuFallback />}>
             <InboxMenu />
         </ClientSideSuspense>
     )
@@ -63,6 +62,25 @@ const InboxMenu = () =>{
                         No notifications
                     </div>
                 )}
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}
+
+const InboxMenuFallback = () => {
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button
+                    variant={"ghost"}
+                    className="relative"
+                    size="icon"
+                >
+                    <BellIcon className="size-5" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-auto">
+                <div className="p-2 w-[400px] text-center text-sm text-muted-foreground">Loading notifications...</div>
             </DropdownMenuContent>
         </DropdownMenu>
     )
