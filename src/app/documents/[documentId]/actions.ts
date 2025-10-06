@@ -3,25 +3,28 @@
 import {auth, clerkClient} from "@clerk/nextjs/server"
 
 export async function getUsers(){
-    console.log("DEBUG SERVER ACTION: getUsers function started.");
+    
     const { sessionClaims } = await auth();
 
     // --- LOGIC BLOCK 1: CLERK SESSION CLAIMS ---
     if (!sessionClaims) {
+        console.error("DEBUG SERVER ACTION FAILURE: No session claims found.");
         // If claims are missing, we can't get the org ID, so return an empty list or throw an error
         return [];
     }
 
     // Determine the organization ID, checking for the nested 'o.id' based on previous debugging
     const userOrgId = sessionClaims?.org_id || sessionClaims?.o?.id;
+
     if (!userOrgId) {
+        console.error("DEBUG SERVER ACTION FAILURE: No valid organization ID found in session claims.");
         return [];
     }
 
     const clerk = await clerkClient();
 
     try {
-        // --- LOGIC BLOCK 2: CALLING CLERK API ---
+        // --- LOGIC BLOCK 2: CALLING CLERK API ---        
         const response = await clerk.users.getUserList({
             organizationId: [userOrgId],
         });
@@ -31,6 +34,7 @@ export async function getUsers(){
             name: user.fullName ?? "Anonymous",
             avatar: user.imageUrl,
         }));
+                
         return users
         
     } catch (e) {

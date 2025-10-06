@@ -11,8 +11,6 @@ const liveblocks = new Liveblocks({
 
 export async function POST(req: Request) {
     const { sessionClaims} = await auth();    
-
-    console.log("DEBUG: Checking Clerk session claims...");
     if(!sessionClaims) {
         console.error("DEBUG FAILURE: Returned 401. Reason: No session claims found.");
         return new Response("Unauthorized", { status: 401 });
@@ -27,9 +25,6 @@ export async function POST(req: Request) {
 
     try {
         const { room } = await req.json();
-
-        // --- LOGIC BLOCK 3: ROOM ID AND CONVEX DOCUMENT ---
-        console.log(`DEBUG: Requested room ID: ${room}`);
 
         if (!room) {
              console.error("DEBUG FAILURE: Returned 400. Reason: Room ID is missing from request body.");
