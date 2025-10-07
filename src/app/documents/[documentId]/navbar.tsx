@@ -32,7 +32,7 @@ import {
     FilePlusIcon, 
     FileTextIcon, 
     GlobeIcon, 
-    Inbox, 
+    // Inbox, 
     ItalicIcon, 
     PrinterIcon, 
     Redo2Icon, 

@@ -5,7 +5,6 @@ import { AlertTriangleIcon } from "lucide-react"
 import Link from "next/link"
 
 const ErrorPage = ({
-    error,
     reset
 }: {
     error: Error & {digest?: string};

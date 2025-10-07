@@ -40,8 +40,10 @@ export async function POST(req: Request) {
         // --- LOGIC BLOCK 4: AUTHORIZATION CHECK ---
         const isOwner = document.ownerId === user.id;
 
-const userOrgId = sessionClaims?.org_id || sessionClaims?.o?.id;
-
+        const userOrgId =
+        sessionClaims?.org_id ||
+        (sessionClaims?.o as { id: string } | undefined)?.id;
+      
 const isOrganizationMember = !!(
     document.organizationId && document.organizationId === userOrgId
 );        
@@ -51,10 +53,17 @@ const isOrganizationMember = !!(
             return new Response("Unauthorized", { status: 401 });
         }
 
+        const name = user.fullName ?? "Anonymous" 
+        const nameToNumber = name.split("").reduce((acc, char) => acc + char.charCodeAt(0),0)
+        const hue = Math.abs(nameToNumber) % 360
+        const color = `hsl(${hue}, 80%, 60%)`
+
+
         const session = liveblocks.prepareSession(user.id, {
             userInfo: {
                 name: user.fullName ?? "Anonymous",
-                avatar: user.imageUrl
+                avatar: user.imageUrl,
+                color,
             }
         })
         session.allow(room, session.FULL_ACCESS)

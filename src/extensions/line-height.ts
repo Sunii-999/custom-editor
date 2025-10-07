@@ -1,5 +1,14 @@
 import { Extension, type CommandProps } from "@tiptap/core"
 
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    lineHeight: {
+      setLineHeight: (lineHeight: string) => ReturnType
+      unsetLineHeight: () => ReturnType
+    }
+  }
+}
+
 export const LineHeightExtension = Extension.create({
   name: "lineHeight",
 
@@ -31,20 +40,23 @@ export const LineHeightExtension = Extension.create({
   addCommands() {
     return {
       setLineHeight:
-        (lineHeight: string) =>
-        ({ commands }: CommandProps) => {
-          return this.options.types.every(type =>
-            commands.updateAttributes(type, { lineHeight }),
-          )
-        },
+  (lineHeight: string) =>
+  ({ commands }: CommandProps) => {
+    return this.options.types.every((type: string) =>
+      commands.updateAttributes(type, { lineHeight }),
+    )
+  },
 
-      unsetLineHeight:
-        () =>
-        ({ commands }: CommandProps) => {
-          return this.options.types.every(type =>
-            commands.updateAttributes(type, { lineHeight: this.options.defaultLineHeight }),
-          )
-        },
+unsetLineHeight:
+  () =>
+  ({ commands }: CommandProps) => {
+    return this.options.types.every((type: string) =>
+      commands.updateAttributes(type, {
+        lineHeight: this.options.defaultLineHeight,
+      }),
+    )
+  },
+
     }
   },
 })

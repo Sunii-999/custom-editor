@@ -23,8 +23,10 @@ export async function getUsers(){
     }
 
     // Determine the organization ID, checking for the nested 'o.id' based on previous debugging
-    const userOrgId = sessionClaims?.org_id || sessionClaims?.o?.id;
-
+    const userOrgId =
+    sessionClaims?.org_id ||
+    (sessionClaims?.o as { id: string } | undefined)?.id;
+  
     if (!userOrgId) {
         console.error("DEBUG SERVER ACTION FAILURE: No valid organization ID found in session claims.");
         return [];
@@ -38,10 +40,12 @@ export async function getUsers(){
             organizationId: [userOrgId],
         });
 
+
         const users = response.data.map((user) => ({
             id: user.id,
             name: user.fullName ?? "Anonymous",
             avatar: user.imageUrl,
+            color: "",
         }));
                 
         return users

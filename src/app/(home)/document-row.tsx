@@ -15,7 +15,6 @@ import { useRouter } from "next/navigation";
 
 interface DocumentRowProps {
     document: Doc<"documents">;
-    isOwner: boolean;
 }
 
 export const DocumentRow =({document}: DocumentRowProps) => {

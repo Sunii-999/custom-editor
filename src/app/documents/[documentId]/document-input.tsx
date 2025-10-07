@@ -20,7 +20,6 @@ export const DocumentInput = ({title, id}: DocumentInputProps) => {
     const status = useStatus()
 
     const [value, setValue] = useState(title)
-    const [isError, setIsError] = useState(false)
     const [isPending, setIsPending] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
 
