@@ -1,6 +1,3 @@
-Here you go — the full README turned into a Markdown file ✅
-
-````markdown
 # 📝 Custom Editor  
 
 A **Google Docs–like collaborative editor** built with **Next.js, TipTap, Radix UI, and Convex**, designed for **real-time collaboration and document sharing**.  
@@ -49,40 +46,5 @@ npx convex dev
 
 ---
 
-## 🧑‍💻 Development
 
-Run the development server:
-
-```bash
-npm run dev
-```
-
-The app will be available at [http://localhost:3000](http://localhost:3000).
-
----
-
-## 📜 Scripts
-
-| Command          | Description                      |
-| ---------------- | -------------------------------- |
-| `npm run dev`    | Start development server         |
-| `npm run build`  | Build production assets          |
-| `npm start`      | Start production server          |
-| `npm run lint`   | Run ESLint to check code quality |
-| `npx convex dev` | Start Convex backend (local dev) |
-
----
-
-## 📌 Roadmap
-
-* ✅ Core rich text editor
-* ⬜ Real-time collaboration with Convex
-* ⬜ AI-powered summary editor
-* ⬜ Document version history
-* ✅Export to PDF / Markdown
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License**.
+The app will be available at [here]([http://localhost:3000](https://custom-editor-tau.vercel.app/)).
