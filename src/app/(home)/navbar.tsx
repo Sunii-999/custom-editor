@@ -9,7 +9,8 @@ export const Navbar = () => {
     <nav className="flex items-center justify-between w-full h-14 px-4 text-white">
       <div className="flex items-center gap-2 shrink-0">
         <Link href="/" className="flex items-center gap-2 hover:opacity-80">
-          <Image src="/logo.svg" alt="Logo" width={28} height={28} className="invert"/>
+          <Image src="/logo.svg" alt="Logo" width={50} height={50} className="invert"/>
+          <p>BluDocs</p>
         </Link>
       </div>
       <div className="flex-1 max-w-lg mx-4">

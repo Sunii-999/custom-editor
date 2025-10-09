@@ -27,7 +27,8 @@ import {
     ListOrderedIcon,
     MinusIcon,
     PlusIcon,
-    ListCollapseIcon
+    ListCollapseIcon,
+    EyeIcon
 } from "lucide-react";
 
 import {cn} from "@/lib/utils";
@@ -54,6 +55,8 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+
+// --- (All helper components like LineHeightButton, FontSizeButton, etc. go here, unchanged) ---
 
 const LineHeightButton = () => {
     const { editor } = useEditorStore();
@@ -85,19 +88,19 @@ const LineHeightButton = () => {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <button
-                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm text-white" // DARK MODE: Added text-white and changed hover bg
                 >
                     <ListCollapseIcon className="size-4"/>
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="p-1 flex flex-col gap-y-1">
+            <DropdownMenuContent className="p-1 flex flex-col gap-y-1 bg-neutral-800 border-neutral-700 print:hidden"> {/* ⬅️ ADDED print:hidden */}
                 {lineheights.map(({label, value}) => (
                     <button
                         key={value}
                         onClick={() => editor?.chain().focus().setLineHeight(value).run()}
                         className={cn(
-                            "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
-                            editor?.getAttributes("paragraph").lineHeight === value && "bg-neutral-200/80"
+                            "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-700/80 text-white", // DARK MODE: Added text-white and changed hover bg
+                            editor?.getAttributes("paragraph").lineHeight === value && "bg-neutral-700/80" // DARK MODE: Changed active bg
                         )}
                     >
                         <span className="text-sm">{label}</span>
@@ -152,16 +155,16 @@ const FontSizeButton = () => {
 
     const decrement = () => {
         const newSize = parseInt(fontSize) - 1;
-         if (newSize > 0) {
+        if (newSize > 0) {
             updateFontSize(newSize.toString());
         }
     }
 
     return(
-        <div className="flex items-center gap-x-0.5">
+        <div className="flex items-center gap-x-0.5 text-white"> {/* DARK MODE: Added text-white */}
             <button
                 onClick={decrement}
-                className="h-7 w-7 shrinks-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80"
+                className="h-7 w-7 shrinks-0 flex items-center justify-center rounded-sm hover:bg-neutral-700/80" // DARK MODE: Changed hover bg
             >
                 <MinusIcon className="size-4" />
             </button>
@@ -172,7 +175,7 @@ const FontSizeButton = () => {
                     onChange={handleInputChange}
                     onBlur={handleInputBlur}
                     onKeyDown={handleKeyDown}
-                     className="h-7 w-10 text-sm text-center border border-neutral-400 rounded-sm bg-transparent focus:outline-none focus:ring-0 "
+                    className="h-7 w-10 text-sm text-center border border-neutral-600 rounded-sm bg-neutral-800 text-white focus:outline-none focus:ring-0 " // DARK MODE: Changed border, bg, and added text-white
                 />
             ) : (
                 <button
@@ -180,14 +183,14 @@ const FontSizeButton = () => {
                         setIsEditing(true);
                         setFontSize(currentFontSize);
                     }}
-                    className="h-7 w-10 text-sm text-center border border-neutral-400 rounded-sm hover:bg-neutral-200/80"
+                    className="h-7 w-10 text-sm text-center border border-neutral-600 rounded-sm hover:bg-neutral-700/80 bg-transparent text-white" // DARK MODE: Changed border, hover bg, and added text-white
                 >
                     {currentFontSize}
                 </button>
             )}
             <button
                 onClick={increment}
-                className="h-7 w-7 shrinks-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80"
+                className="h-7 w-7 shrinks-0 flex items-center justify-center rounded-sm hover:bg-neutral-700/80" // DARK MODE: Changed hover bg
             >
                 <PlusIcon className="size-4" />
             </button>
@@ -217,19 +220,19 @@ const ListButton = () => {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <button
-                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm text-white" // DARK MODE: Added text-white and changed hover bg
                 >
                     <ListIcon className="size-4"/>
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="p-1 flex flex-col gap-y-1">
+            <DropdownMenuContent className="p-1 flex flex-col gap-y-1 bg-neutral-800 border-neutral-700 print:hidden"> {/* ⬅️ ADDED print:hidden */}
                 {lists.map(({label, icon: Icon, onClick, isActive}) => (
                     <button
                         key={label}
                         onClick={onClick}
                         className={cn(
-                            "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
-                            isActive() && "bg-neutral-200/80"
+                            "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-700/80 text-white", // DARK MODE: Added text-white and changed hover bg
+                            isActive() && "bg-neutral-700/80" // DARK MODE: Changed active bg
                         )}
                     >
                         <Icon className="size-4"/>
@@ -271,19 +274,19 @@ const AlignButton = () => {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <button
-                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm text-white" // DARK MODE: Added text-white and changed hover bg
                 >
                     <AlignLeftIcon className="size-4"/>
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="p-1 flex flex-col gap-y-1">
+            <DropdownMenuContent className="p-1 flex flex-col gap-y-1 bg-neutral-800 border-neutral-700 print:hidden"> {/* ⬅️ ADDED print:hidden */}
                 {alignments.map(({label, value, icon: Icon}) => (
                     <button
                         key={value}
                         onClick={() => editor?.chain().focus().setTextAlign(value).run()}
                         className={cn(
-                            "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
-                            editor?.isActive({textAlign: value}) && "bg-neutral-200/80"
+                            "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-700/80 text-white", // DARK MODE: Added text-white and changed hover bg
+                            editor?.isActive({textAlign: value}) && "bg-neutral-700/80" // DARK MODE: Changed active bg
                         )}
                     >
                         <Icon className="size-4"/>
@@ -333,17 +336,17 @@ const ImageButton = () => {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <button
-                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm text-white" // DARK MODE: Added text-white and changed hover bg
                 >
                     <ImageIcon className="size-4"/>
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem onClick={onUpload}>
+            <DropdownMenuContent className="bg-neutral-800 border-neutral-700 text-white print:hidden"> {/* ⬅️ ADDED print:hidden */}
+                <DropdownMenuItem onClick={onUpload} className="hover:bg-neutral-700/80 focus:bg-neutral-700/80"> {/* DARK MODE: Changed hover/focus bg */}
                     <UploadIcon className="size-4 mr-2" />
                         Upload
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick = {() => setIsDialogOpen(true)}>
+                <DropdownMenuItem onClick = {() => setIsDialogOpen(true)} className="hover:bg-neutral-700/80 focus:bg-neutral-700/80"> {/* DARK MODE: Changed hover/focus bg */}
                     <SearchIcon className="size-4 mr-2" />
                         Paste image url
 
@@ -351,7 +354,7 @@ const ImageButton = () => {
             </DropdownMenuContent>
         </DropdownMenu>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent>
+            <DialogContent className="bg-neutral-800 border-neutral-700 text-white print:hidden"> {/* ⬅️ ADDED print:hidden */}
                 <DialogHeader>
                     <DialogTitle>
                         Insert image URL
@@ -365,6 +368,7 @@ const ImageButton = () => {
                                 handleImageUrlSubmit()
                             }
                         }}
+                        className="bg-neutral-900 border-neutral-700 text-white" // DARK MODE: Changed Input bg, border, and text
                     />
                 </DialogHeader>
                 <DialogFooter>
@@ -397,16 +401,17 @@ const LinkButton = () => {
         }}>
             <DropdownMenuTrigger asChild>
                 <button
-                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm text-white" // DARK MODE: Added text-white and changed hover bg
                 >
                     <Link2Icon className="size-4"/>
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="p-2.5 flex items-center gap-x-2">
+            <DropdownMenuContent className="p-2.5 flex items-center gap-x-2 bg-neutral-800 border-neutral-700 print:hidden"> {/* ⬅️ ADDED print:hidden */}
                 <Input 
                     placeholder="https://www.example.com"
                     value = {value}
                     onChange={(e) => setValue(e.target.value)}
+                    className="bg-neutral-900 border-neutral-700 text-white" // DARK MODE: Changed Input bg, border, and text
                 />
                 <Button
                     onClick={() => onChange(value)}
@@ -432,12 +437,12 @@ const HighlightColorButton = () => {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <button
-                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm text-white" // DARK MODE: Added text-white and changed hover bg
                 >
                     <HighlighterIcon className="size-4"/>
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="p-0">
+            <DropdownMenuContent className="p-0 bg-neutral-800 border-neutral-700 print:hidden"> {/* ⬅️ ADDED print:hidden */}
                 <SketchPicker
                     color = {value}
                     onChange={onChange}
@@ -460,9 +465,9 @@ const TextColorButton = () => {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <button
-                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+                    className="h-7 min-w-7 shrinks-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm" // DARK MODE: Changed hover bg
                 >
-                    <span className="text-xs">
+                    <span className="text-xs text-white"> {/* DARK MODE: Added text-white */}
                         A
                     </span>
                     <div className="h-0.5 w-full" style={{ backgroundColor: value }}>
@@ -470,7 +475,7 @@ const TextColorButton = () => {
                     </div>
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="p-0">
+            <DropdownMenuContent className="p-0 bg-neutral-800 border-neutral-700 print:hidden"> {/* ⬅️ ADDED print:hidden */}
                 <SketchPicker
                     color={value}
                     onChange={onChange}
@@ -504,36 +509,36 @@ const HeadingLevelButton = () => {
             <DropdownMenuTrigger asChild>
                 <button
                         className={cn(
-                            "h-7 min-w-7 shrinks-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm",
-                            editor?.isActive("fontFamily") && "bg-neutral-200/80"
+                            "h-7 min-w-7 shrinks-0 flex items-center justify-center rounded-sm hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm text-white", // DARK MODE: Added text-white and changed hover bg
+                            editor?.isActive("fontFamily") && "bg-neutral-700/80" // DARK MODE: Changed active bg
                         )}
                     >
-                        <span className="truncate">
+                        <span className="truncate flex items-center">
                             {getCurrentHeading()}
                             <ChevronDownIcon className="ml-2 size-4 shrink-0"/>
                         </span>
-                    </button>
+                </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="p-1 flex flex-col gap-y-1">
-                        {headings.map(({label, value, fontSize}) => (
-                            <button
-                                key={value}
-                                style={{fontSize}} 
-                                onClick={() => {
-                                    if (value === 0){
-                                        editor?.chain().focus().setParagraph().run();
-                                    } else {
-                                        editor?.chain().focus().toggleHeading({ level:  value as Level}).run();
-                                    }
-                                }}
-                                className={cn(
-                                    "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
-                                    (value === 0 && !editor?.isActive("heading")) || editor?.isActive("heading", {level: value}) &&"bg-neutral-200/80"
-                                )}
-                            >
-                                <span style={{ fontSize }}>{label}</span>
-                            </button>
-                            ))}
+            <DropdownMenuContent className="p-1 flex flex-col gap-y-1 bg-neutral-800 border-neutral-700 print:hidden">
+                                {headings.map(({label, value, fontSize}) => (
+                                    <button
+                                        key={value}
+                                        style={{fontSize}} 
+                                        onClick={() => {
+                                            if (value === 0){
+                                                editor?.chain().focus().setParagraph().run();
+                                            } else {
+                                                editor?.chain().focus().toggleHeading({ level:  value as Level}).run();
+                                            }
+                                        }}
+                                        className={cn(
+                                            "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-700/80 text-white", // DARK MODE: Added text-white and changed hover bg
+                                            (value === 0 && !editor?.isActive("heading")) || editor?.isActive("heading", {level: value}) &&"bg-neutral-700/80" // DARK MODE: Changed active bg
+                                        )}
+                                    >
+                                        <span style={{ fontSize }}>{label}</span>
+                                    </button>
+                                    ))}
             </DropdownMenuContent>
         </DropdownMenu>
     )
@@ -562,30 +567,30 @@ const FontFamilyButton = () => {
             <DropdownMenuTrigger asChild>
                 <button
                     className={cn(
-                        "h-7 w-[120px] shrinks-0 flex items-center justify-between rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm",
-                        editor?.isActive("fontFamily") && "bg-neutral-200/80"
+                        "h-7 w-[120px] shrinks-0 flex items-center justify-between rounded-sm hover:bg-neutral-700/80 px-1.5 overflow-hidden text-sm text-white", // DARK MODE: Added text-white and changed hover bg
+                        editor?.isActive("fontFamily") && "bg-neutral-700/80" // DARK MODE: Changed active bg
                     )}
                 >
-                    <span className="truncate">
+                    <span className="truncate flex items-center">
                         {editor?.getAttributes("textStyle").fontFamily || "Arial"}
                         <ChevronDownIcon className="ml-2 size-4 shrink-0"/>
                     </span>
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="p-1 flex flex-col gap-y-1">
-                    {fonts.map(({label, value}) => (
-                        <button
-                            onClick={() => editor?.chain().focus().setFontFamily(value).run()}
-                            key={value}
-                            className={cn(
-                                "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
-                                editor?.getAttributes("textStyle").fontFamily === value && "bg-neutral-200/80"
-                            )}
-                            style={{ fontFamily: value}}
-                        >
-                            <span className="text-sm">{label}</span>
-                        </button>
-                    ))}
+            <DropdownMenuContent className="p-1 flex flex-col gap-y-1 bg-neutral-800 border-neutral-700 print:hidden"> {/* ⬅️ ADDED print:hidden */}
+                                {fonts.map(({label, value}) => (
+                                    <button
+                                        onClick={() => editor?.chain().focus().setFontFamily(value).run()}
+                                        key={value}
+                                        className={cn(
+                                            "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-700/80 text-white", // DARK MODE: Added text-white and changed hover bg
+                                            editor?.getAttributes("textStyle").fontFamily === value && "bg-neutral-700/80" // DARK MODE: Changed active bg
+                                        )}
+                                        style={{ fontFamily: value}}
+                                    >
+                                        <span className="text-sm">{label}</span>
+                                    </button>
+                                    ))}
             </DropdownMenuContent>
         </DropdownMenu>
     )
@@ -594,7 +599,7 @@ const FontFamilyButton = () => {
 interface ToolbarButtonProps {
     onClick?: () => void;
     isActive?: boolean;
-    icon:  LucideIcon
+    icon:  LucideIcon
 }
 
 const ToolbarButton = ({
@@ -606,15 +611,52 @@ const ToolbarButton = ({
         <button
             onClick={onClick}
             className={cn(
-                "text-sm h-7 min-w-7 flex items-center justify-center rounded-sm hover:bg-neutral-200/80",
-                isActive && "bg-neutral-200/80"
+                "text-sm h-7 min-w-7 flex items-center justify-center rounded-sm hover:bg-neutral-700/80 text-white", // DARK MODE: Added text-white and changed hover bg
+                isActive && "bg-neutral-700/80" // DARK MODE: Changed active bg
             )}
         >
             <Icon className="size-4"/>
         </button>
     )
 }
-export const Toolbar = () => {
+
+// ⬅️ NEW PROPS INTERFACE FOR TOOLBAR
+export interface ToolbarProps {
+    onToggleReaderMode: () => void;
+    isReaderModeActive: boolean;
+}
+
+// ⬅️ Moved this component definition *inside* the file scope before its use
+interface ToggleReaderModeButtonProps {
+    onToggle: () => void;
+    isReaderModeActive: boolean;
+}
+
+const ToggleReaderModeButton = ({
+    onToggle,
+    isReaderModeActive,
+}: ToggleReaderModeButtonProps) => {
+    return (
+        <button
+            onClick={onToggle}
+            className={cn(
+                "text-sm h-7 min-w-7 flex items-center justify-center rounded-sm px-1.5 overflow-hidden",
+                "text-white hover:bg-neutral-700/80", // Standard toolbar styles
+                // Active state styling: using a soft yellow background for the icon
+                isReaderModeActive ? "bg-yellow-600 hover:bg-yellow-700" : "bg-transparent",
+            )}
+            title="Toggle Reader-Friendly Background"
+        >
+            <EyeIcon className={cn(
+                "size-4",
+                isReaderModeActive && "text-white" // ensure icon is white on yellow background
+            )} />
+        </button>
+    )
+}
+
+// ⬅️ UPDATED TOOLBAR COMPONENT TO ACCEPT PROPS
+export const Toolbar = ({onToggleReaderMode, isReaderModeActive}: ToolbarProps) => {
 
     const { editor } = useEditorStore();
 
@@ -694,23 +736,23 @@ export const Toolbar = () => {
     ];
 
     return (
-        <div className="bg-[#f1f4f9] px-2.5 py-0.5 rounded-[24px] min-h-[40px] flex items center gap-x-0.5 overflow-x-auto">
+        <div className="bg-[#16181a] text-white px-2.5 py-0.5 rounded-[24px] min-h-[40px] flex items center gap-x-0.5 overflow-x-auto">
             {sections[0].map((item) => (
                 <ToolbarButton key={item.label} {...item} />
             ))}
-            <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+            <Separator orientation="vertical" className="h-6 bg-neutral-600" />
             <FontFamilyButton />
-            <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+            <Separator orientation="vertical" className="h-6 bg-neutral-600" />
             <HeadingLevelButton />
-            <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+            <Separator orientation="vertical" className="h-6 bg-neutral-600" />
             <FontSizeButton />
-            <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+            <Separator orientation="vertical" className="h-6 bg-neutral-600" />
             {sections[1].map((item) => (
                 <ToolbarButton key={item.label} {...item} />
             ))}
             <TextColorButton />
             <HighlightColorButton />
-            <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+            <Separator orientation="vertical" className="h-6 bg-neutral-600" />
             <LinkButton />
             <ImageButton />
             <AlignButton />
@@ -719,6 +761,13 @@ export const Toolbar = () => {
             {sections[2].map((item) => (
                 <ToolbarButton key={item.label} {...item} />
             ))}
+            
+            {/* ⬅️ ADDED READER MODE BUTTON HERE */}
+            <Separator orientation="vertical" className="h-6 bg-neutral-600" />
+            <ToggleReaderModeButton 
+                onToggle={onToggleReaderMode} 
+                isReaderModeActive={isReaderModeActive} 
+            />
         </div>
     )
 }

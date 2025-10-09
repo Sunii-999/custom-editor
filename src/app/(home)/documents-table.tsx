@@ -64,7 +64,7 @@ export const DocumentsTable = ({
                     )}
                 </Table>
             )}
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center text-white">
                 <Button
                     variant="ghost"
                     size="sm"
